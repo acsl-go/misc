@@ -11,6 +11,7 @@ type Buffer struct {
 	idx       int
 	len       int
 	buffer    []byte
+	Tag       int
 	_refCount int32
 	_pool     *BufferPool
 }
