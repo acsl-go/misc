@@ -128,6 +128,15 @@ func (buf *Buffer) Bytes() []byte {
 	return buf.buffer[0:buf.len]
 }
 
+func (buf *Buffer) Buffer() []byte {
+	return buf.buffer
+}
+
+func (buf *Buffer) SetDataLen(len int) {
+	buf.idx = 0
+	buf.len = len
+}
+
 func (buf *Buffer) ReadByte() (byte, error) {
 	if buf.idx >= buf.len {
 		return 0, io.EOF
