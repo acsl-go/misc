@@ -12,9 +12,7 @@ func NewBufferPool(maxBufferSize uint) *BufferPool {
 		MaxBufferSize: maxBufferSize,
 		_pool: sync.Pool{
 			New: func() interface{} {
-				return &Buffer{
-					buffer: make([]byte, maxBufferSize),
-				}
+				return NewBuffer(maxBufferSize)
 			},
 		},
 	}

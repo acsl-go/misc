@@ -15,6 +15,16 @@ type Buffer struct {
 	_pool     *BufferPool
 }
 
+func NewBuffer(sz uint) *Buffer {
+	return &Buffer{
+		idx:       0,
+		len:       0,
+		buffer:    make([]byte, sz),
+		_refCount: 1,
+		_pool:     nil,
+	}
+}
+
 func (buf *Buffer) Reset() {
 	buf.idx = 0
 	buf.len = 0
@@ -25,9 +35,11 @@ func (buf *Buffer) AddRef() *Buffer {
 	return buf
 }
 
-func (buf *Buffer) Recycle() {
+func (buf *Buffer) Release() {
 	if atomic.AddInt32(&buf._refCount, -1) == 0 {
-		buf._pool._pool.Put(buf)
+		if buf._pool != nil {
+			buf._pool._pool.Put(buf)
+		}
 	}
 }
 
