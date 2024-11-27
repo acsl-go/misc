@@ -95,7 +95,7 @@ func (buf *Buffer) Seek(offset int64, whence int) (int64, error) {
 	return int64(abs), nil
 }
 
-func (buf *Buffer) WrtieJson(obj interface{}) (n int, err error) {
+func (buf *Buffer) WriteJson(obj interface{}) (n int, err error) {
 	oriPos := buf.idx
 	encoder := json.NewEncoder(buf)
 	if e := encoder.Encode(obj); e != nil {
