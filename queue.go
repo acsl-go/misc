@@ -35,6 +35,7 @@ func (q *Queue[T]) _allocItem(data T) *_queueItem[T] {
 	}
 	item := q.Pool.pool.Get().(*_queueItem[T])
 	item.data = data
+	item.next = nil
 	return item
 }
 
