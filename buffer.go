@@ -125,6 +125,13 @@ func (buf *Buffer) Pos() int {
 	return buf.idx
 }
 
+func (buf *Buffer) Data() []byte {
+	if buf.idx >= buf.len {
+		return nil
+	}
+	return buf.buffer[buf.idx:buf.len]
+}
+
 func (buf *Buffer) Bytes() []byte {
 	return buf.buffer[0:buf.len]
 }
