@@ -160,55 +160,257 @@ func (buf *Buffer) WriteByte(b byte) error {
 }
 
 func (buf *Buffer) ReadLittleEndian(data any) error {
-	if buf.idx+4 > buf.len {
-		return io.EOF
-	}
-	err := binary.Read(buf, binary.LittleEndian, data)
-	if err != nil {
-		return err
-	}
-	buf.idx += 4
-	return nil
+	return binary.Read(buf, binary.LittleEndian, data)
 }
 
 func (buf *Buffer) ReadBigEndian(data any) error {
-	if buf.idx+4 > buf.len {
-		return io.EOF
-	}
-	err := binary.Read(buf, binary.BigEndian, data)
-	if err != nil {
-		return err
-	}
-	buf.idx += 4
-	return nil
+	return binary.Read(buf, binary.BigEndian, data)
 }
 
 func (buf *Buffer) WriteLittleEndian(v any) error {
-	if buf.idx+4 > len(buf.buffer) {
-		return io.ErrShortBuffer
-	}
-	err := binary.Write(buf, binary.LittleEndian, v)
-	if err != nil {
-		return err
-	}
-	buf.idx += 4
-	if buf.idx > buf.len {
-		buf.len = buf.idx
-	}
-	return nil
+	return binary.Write(buf, binary.LittleEndian, v)
 }
 
 func (buf *Buffer) WriteBigEndian(v any) error {
-	if buf.idx+4 > len(buf.buffer) {
-		return io.ErrShortBuffer
+	return binary.Write(buf, binary.BigEndian, v)
+}
+
+func (buf *Buffer) ReadInt8LE() (int8, error) {
+	var v int8
+	if err := buf.ReadLittleEndian(&v); err != nil {
+		return 0, err
 	}
-	err := binary.Write(buf, binary.BigEndian, v)
-	if err != nil {
-		return err
+	return v, nil
+}
+
+func (buf *Buffer) WriteInt8LE(v int8) error {
+	return buf.WriteLittleEndian(v)
+}
+
+func (buf *Buffer) ReadUint8LE() (uint8, error) {
+	var v uint8
+	if err := buf.ReadLittleEndian(&v); err != nil {
+		return 0, err
 	}
-	buf.idx += 4
-	if buf.idx > buf.len {
-		buf.len = buf.idx
+	return v, nil
+}
+
+func (buf *Buffer) WriteUint8LE(v uint8) error {
+	return buf.WriteLittleEndian(v)
+}
+
+func (buf *Buffer) ReadInt16LE() (int16, error) {
+	var v int16
+	if err := buf.ReadLittleEndian(&v); err != nil {
+		return 0, err
 	}
-	return nil
+	return v, nil
+}
+
+func (buf *Buffer) WriteInt16LE(v int16) error {
+	return buf.WriteLittleEndian(v)
+}
+
+func (buf *Buffer) ReadUint16LE() (uint16, error) {
+	var v uint16
+	if err := buf.ReadLittleEndian(&v); err != nil {
+		return 0, err
+	}
+	return v, nil
+}
+
+func (buf *Buffer) WriteUint16LE(v uint16) error {
+	return buf.WriteLittleEndian(v)
+}
+
+func (buf *Buffer) ReadInt32LE() (int32, error) {
+	var v int32
+	if err := buf.ReadLittleEndian(&v); err != nil {
+		return 0, err
+	}
+	return v, nil
+}
+
+func (buf *Buffer) WriteInt32LE(v int32) error {
+	return buf.WriteLittleEndian(v)
+}
+
+func (buf *Buffer) ReadUint32LE() (uint32, error) {
+	var v uint32
+	if err := buf.ReadLittleEndian(&v); err != nil {
+		return 0, err
+	}
+	return v, nil
+}
+
+func (buf *Buffer) WriteUint32LE(v uint32) error {
+	return buf.WriteLittleEndian(v)
+}
+
+func (buf *Buffer) ReadInt64LE() (int64, error) {
+	var v int64
+	if err := buf.ReadLittleEndian(&v); err != nil {
+		return 0, err
+	}
+	return v, nil
+}
+
+func (buf *Buffer) WriteInt64LE(v int64) error {
+	return buf.WriteLittleEndian(v)
+}
+
+func (buf *Buffer) ReadUint64LE() (uint64, error) {
+	var v uint64
+	if err := buf.ReadLittleEndian(&v); err != nil {
+		return 0, err
+	}
+	return v, nil
+}
+
+func (buf *Buffer) WriteUint64LE(v uint64) error {
+	return buf.WriteLittleEndian(v)
+}
+
+func (buf *Buffer) ReadFloat32LE() (float32, error) {
+	var v float32
+	if err := buf.ReadLittleEndian(&v); err != nil {
+		return 0, err
+	}
+	return v, nil
+}
+
+func (buf *Buffer) WriteFloat32LE(v float32) error {
+	return buf.WriteLittleEndian(v)
+}
+
+func (buf *Buffer) ReadFloat64LE() (float64, error) {
+	var v float64
+	if err := buf.ReadLittleEndian(&v); err != nil {
+		return 0, err
+	}
+	return v, nil
+}
+
+func (buf *Buffer) WriteFloat64LE(v float64) error {
+	return buf.WriteLittleEndian(v)
+}
+
+func (buf *Buffer) ReadInt8BE() (int8, error) {
+	var v int8
+	if err := buf.ReadBigEndian(&v); err != nil {
+		return 0, err
+	}
+	return v, nil
+}
+
+func (buf *Buffer) WriteInt8BE(v int8) error {
+	return buf.WriteBigEndian(v)
+}
+
+func (buf *Buffer) ReadUint8BE() (uint8, error) {
+	var v uint8
+	if err := buf.ReadBigEndian(&v); err != nil {
+		return 0, err
+	}
+	return v, nil
+}
+
+func (buf *Buffer) WriteUint8BE(v uint8) error {
+	return buf.WriteBigEndian(v)
+}
+
+func (buf *Buffer) ReadInt16BE() (int16, error) {
+	var v int16
+	if err := buf.ReadBigEndian(&v); err != nil {
+		return 0, err
+	}
+	return v, nil
+}
+
+func (buf *Buffer) WriteInt16BE(v int16) error {
+	return buf.WriteBigEndian(v)
+}
+
+func (buf *Buffer) ReadUint16BE() (uint16, error) {
+	var v uint16
+	if err := buf.ReadBigEndian(&v); err != nil {
+		return 0, err
+	}
+	return v, nil
+}
+
+func (buf *Buffer) WriteUint16BE(v uint16) error {
+	return buf.WriteBigEndian(v)
+}
+
+func (buf *Buffer) ReadInt32BE() (int32, error) {
+	var v int32
+	if err := buf.ReadBigEndian(&v); err != nil {
+		return 0, err
+	}
+	return v, nil
+}
+
+func (buf *Buffer) WriteInt32BE(v int32) error {
+	return buf.WriteBigEndian(v)
+}
+
+func (buf *Buffer) ReadUint32BE() (uint32, error) {
+	var v uint32
+	if err := buf.ReadBigEndian(&v); err != nil {
+		return 0, err
+	}
+	return v, nil
+}
+
+func (buf *Buffer) WriteUint32BE(v uint32) error {
+	return buf.WriteBigEndian(v)
+}
+
+func (buf *Buffer) ReadInt64BE() (int64, error) {
+	var v int64
+	if err := buf.ReadBigEndian(&v); err != nil {
+		return 0, err
+	}
+	return v, nil
+}
+
+func (buf *Buffer) WriteInt64BE(v int64) error {
+	return buf.WriteBigEndian(v)
+}
+
+func (buf *Buffer) ReadUint64BE() (uint64, error) {
+	var v uint64
+	if err := buf.ReadBigEndian(&v); err != nil {
+		return 0, err
+	}
+	return v, nil
+}
+
+func (buf *Buffer) WriteUint64BE(v uint64) error {
+	return buf.WriteBigEndian(v)
+}
+
+func (buf *Buffer) ReadFloat32BE() (float32, error) {
+	var v float32
+	if err := buf.ReadBigEndian(&v); err != nil {
+		return 0, err
+	}
+	return v, nil
+}
+
+func (buf *Buffer) WriteFloat32BE(v float32) error {
+	return buf.WriteBigEndian(v)
+}
+
+func (buf *Buffer) ReadFloat64BE() (float64, error) {
+	var v float64
+	if err := buf.ReadBigEndian(&v); err != nil {
+		return 0, err
+	}
+	return v, nil
+}
+
+func (buf *Buffer) WriteFloat64BE(v float64) error {
+	return buf.WriteBigEndian(v)
 }
