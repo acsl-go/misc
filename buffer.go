@@ -7,6 +7,12 @@ import (
 	"sync/atomic"
 )
 
+const (
+	SEEK_SET = 0
+	SEEK_CUR = 1
+	SEEK_END = 2
+)
+
 type Buffer struct {
 	idx       int
 	len       int
@@ -162,6 +168,71 @@ func (buf *Buffer) WriteByte(b byte) error {
 	buf.idx++
 	if buf.idx > buf.len {
 		buf.len = buf.idx
+	}
+	return nil
+}
+
+func (buf *Buffer) ReadString() (string, error) {
+	if buf.idx+4 > buf.len {
+		return "", io.EOF
+	}
+
+	n, _ := buf.ReadUint32BE()
+	if buf.idx+int(n) > buf.len {
+		return "", io.EOF
+	}
+
+	s := string(buf.buffer[buf.idx : buf.idx+int(n)])
+	buf.idx += int(n)
+	return s, nil
+}
+
+func (buf *Buffer) MustReadString() string {
+	s, err := buf.ReadString()
+	if err != nil {
+		panic(err)
+	}
+	return s
+}
+
+func (buf *Buffer) WriteString(s string) error {
+	if e := buf.WriteUint32BE(uint32(len(s))); e != nil {
+		return e
+	}
+	if _, e := buf.Write([]byte(s)); e != nil {
+		return e
+	}
+	return nil
+}
+
+func (buf *Buffer) ReadCString() (string, error) {
+	start := buf.idx
+	for {
+		if start >= buf.len {
+			return "", io.EOF
+		}
+		if buf.buffer[start] == 0 {
+			s := string(buf.buffer[buf.idx:start])
+			buf.idx = start + 1
+			return s, nil
+		}
+	}
+}
+
+func (buf *Buffer) MustReadCString() string {
+	s, err := buf.ReadCString()
+	if err != nil {
+		panic(err)
+	}
+	return s
+}
+
+func (buf *Buffer) WriteCString(s string) error {
+	if _, e := buf.Write([]byte(s)); e != nil {
+		return e
+	}
+	if e := buf.WriteByte(0); e != nil {
+		return e
 	}
 	return nil
 }
