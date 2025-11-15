@@ -4,6 +4,7 @@ import (
 	"encoding/binary"
 	"encoding/json"
 	"io"
+	"sync"
 	"sync/atomic"
 )
 
@@ -19,7 +20,7 @@ type Buffer struct {
 	buffer    []byte
 	Tag       int
 	_refCount int32
-	_pool     *BufferPool
+	_pool     *sync.Pool
 }
 
 func NewBuffer(sz uint) *Buffer {
@@ -42,10 +43,20 @@ func (buf *Buffer) AddRef() *Buffer {
 	return buf
 }
 
+func (buf *Buffer) Resize(sz uint, keepData bool) {
+	if sz > uint(cap(buf.buffer)) {
+		newBuffer := make([]byte, sz)
+		if keepData {
+			copy(newBuffer, buf.buffer[:buf.len])
+		}
+		buf.buffer = newBuffer
+	}
+}
+
 func (buf *Buffer) Release() {
 	if atomic.AddInt32(&buf._refCount, -1) == 0 {
 		if buf._pool != nil {
-			buf._pool._pool.Put(buf)
+			buf._pool.Put(buf)
 		}
 	}
 }
