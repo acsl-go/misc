@@ -15,12 +15,13 @@ const (
 )
 
 type Buffer struct {
-	idx       int
-	len       int
-	buffer    []byte
-	Tag       int
-	_refCount int32
-	_pool     *sync.Pool
+	idx        int
+	len        int
+	buffer     []byte
+	Tag        int
+	Attachment any
+	_refCount  int32
+	_pool      *sync.Pool
 }
 
 func NewBuffer(sz uint) *Buffer {
